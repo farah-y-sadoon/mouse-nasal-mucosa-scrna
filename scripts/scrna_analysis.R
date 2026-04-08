@@ -1,36 +1,35 @@
 # Analysis of mouse nasal mucosa after influenza infection with single cell RNA-seq
-# This analysis is based on a tutorial of single-cell RNA-seq data analysis in R by Zhisong He and Barbara Treutlein: https://github.com/quadbio/scRNAseq_analysis_vignette/blob/master/Tutorial.md#preparation 
-# and BINF 6110 Lecture 17 Tutorial 
+# This analysis is based on the following tutorials of single-cell RNA-seq data analysis in R: 
+# Zhisong He and Barbara Treutlein: https://github.com/quadbio/scRNAseq_analysis_vignette/blob/master/Tutorial.md#preparation 
+# BINF 6110 Lecture 17 Tutorial 
+# https://swbioinf.github.io/scRNAseqInR_Doco/clustermarkers.html
+# https://swbioinf.github.io/scRNAseqInR_Doco/singler.html 
 
 # LOAD LIBRARIES ----
 library(tidyverse)
 library(patchwork)
 # install.packages("Seurat")
 library(Seurat)
-# if (!requireNamespace("glmGamPoi", quietly = TRUE))
-#   BiocManager::install("glmGamPoi")
-library(glmGamPoi)
-
+# install.packages('devtools')
+# devtools::install_github('immunogenomics/presto')
+library(presto)
+# BiocManager::install("SingleR")
+# BiocManager::install("celldex")
+library(SingleR)
+library(celldex)
+library(SingleCellExperiment)
 
 # LOAD DATA ----
 seurat_obj <- readRDS("../data/seurat_ass4.rds")
 cat(sprintf("Cells after loading: %d\n", ncol(seurat_obj)))
 # QUALITY CONTROL ----
-# Check for missing values
-colSums(is.na(seurat_obj@meta.data) | seurat_obj@meta.data == "")
-
-# # Remove records with missing mouse id (look for mice ids that are required for downstream batch effect corrections)
-# seurat_rm <- subset(seurat_rm, subset = mouse_id %in% c("m1_RT_D5", "m2_RT_D5", "m3_RT_D5",
-#                                                         "m1_RT_Naive", "m2_RT_Naive", "m3_RT_Naive"))
-# cat(sprintf("Cells remaining after mouse_id filter: %d\n", ncol(seurat_rm)))
-
 # Add percent.mt column to investigate percentage of mitochondrial DNA
 seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^mt-")
 
 # Visualize QC metrics as a violin plot
 qc1 <- VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3, pt.size = 0)
 
-# Filter data for degraded cells and potential doublets
+# Filter data for potentially degraded cells
 seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > 200 & percent.mt < 10)
 cat(sprintf("Cells after QC filtering: %d\n", ncol(seurat_obj)))
 
@@ -45,3 +44,78 @@ ggsave("../figs/02_qc_violin.png", plot = qc_violin_plots, width = 12, height = 
 # NORMALIZATION ----
 seurat_obj <- NormalizeData(seurat_obj)
 seurat_obj <- FindVariableFeatures(seurat_obj, nfeatures = 3000)
+seurat_obj <- ScaleData(seurat_obj, features = VariableFeatures(seurat_obj))
+
+# Visualize top features
+top_features <- head(VariableFeatures(seurat_obj), 20)
+p1 <- VariableFeaturePlot(seurat_obj)
+p2 <- LabelPoints(plot = p1, points = top_features, repel = TRUE)
+ggsave("../figs/03_variable_features.png", plot = p2, width = 12, height = 6, dpi = 300)
+
+# PCA ----
+seurat_obj <- RunPCA(seurat_obj, features = VariableFeatures(seurat_obj))
+elbow_plot <- ElbowPlot(seurat_obj, ndims = 50)
+ggsave("../figs/04_elbow_plot.png", plot = elbow_plot, width = 8, height = 6, dpi = 300)
+
+# CLUSTERING ----
+# Clustering
+seurat_obj <- FindNeighbors(seurat_obj, dims = 1:30)
+seurat_obj <- FindClusters(seurat_obj, resolution = 0.5)
+head(seurat_obj$seurat_clusters)
+
+# Create UMAP
+seurat_obj <- RunUMAP(seurat_obj, dims = 1:30)
+umap_clusters <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, raster = FALSE)
+umap_tissue <- DimPlot(seurat_obj, reduction = "umap", group.by = "organ_custom", label = TRUE, raster = FALSE)
+umap_time <- DimPlot(seurat_obj, reduction = "umap", group.by = "time", raster = FALSE)
+
+ggsave("../figs/05_umap_clusters.png", plot = umap_clusters, width = 10, height = 8, dpi = 300)
+
+# Save Processed Seurat Object
+saveRDS(seurat_obj, "../data/seurat_processed.rds")
+
+# Find cluster markers
+all_markers <- FindAllMarkers(seurat_obj, only.pos = TRUE)
+
+write.csv(all_markers, "../data/all_markers.csv", row.names = FALSE)
+
+# ANNOTATION ----
+# Loading the mouse immune gene reference library 
+mouse_imm_gen_ref <- ImmGenData()
+
+# Create single cell experiment object
+sce <- as.SingleCellExperiment(seurat_obj)
+
+# Run SingleR to annotate with reference library
+singler_results <- SingleR(test = sce, ref = mouse_imm_gen_ref, labels = mouse_imm_gen_ref$label.main)
+table(singler_results$labels)
+
+# Add SingleR labels to the Seurat object
+seurat_obj$SingleR.labels <- singler_results$labels
+
+# Look at cell types across time points and tissue types
+print("Frequency of cell types across time:")
+table(seurat_obj$SingleR.labels, seurat_obj$time)
+
+print("Frequency of cell types across tissue types:")
+table(seurat_obj$SingleR.labels, seurat_obj$organ_custom)
+
+# Look at macrophage counts across clusters
+print("Frequency of Macrophages across clusters:")
+table(seurat_obj$seurat_clusters[seurat_obj$SingleR.labels == "Macrophages"])
+
+# Look at top 20 genes (with statistical significance) in cluster 1 to see if markers line up with Macrophages
+print("Top 20 genes in cluster 1 (by log2 fold change):")
+all_markers %>% 
+  filter(cluster == 1, p_val_adj < 0.05) %>% 
+  slice_max(order_by = avg_log2FC, n = 20) %>%
+  print()
+
+# Feature plot to show cluster 1 markers (Macrophage markers)
+feature_plot <- FeaturePlot(seurat_obj, features = c("Fcrls", "Trem2", "C1qa"), ncol = 3)
+ggsave("../figs/06_feature_plot_macrophages.png", 
+       plot = feature_plot, 
+       width = 24, height = 8, dpi = 300)
+
+
+
