@@ -1,9 +1,17 @@
-# Analysis of mouse nasal mucosa after influenza infection with single cell RNA-seq
+# Clustering analysis of mouse nasal mucosa after influenza infection with single cell RNA-seq
 # This analysis is based on the following tutorials of single-cell RNA-seq data analysis in R: 
 # Zhisong He and Barbara Treutlein: https://github.com/quadbio/scRNAseq_analysis_vignette/blob/master/Tutorial.md#preparation 
 # BINF 6110 Lecture 17 Tutorial 
 # https://swbioinf.github.io/scRNAseqInR_Doco/clustermarkers.html
-# https://swbioinf.github.io/scRNAseqInR_Doco/singler.html 
+# https://swbioinf.github.io/scRNAseqInR_Doco/singler.html
+
+# SET WORKING DIRECTORY ----
+# Assumes user is in the top level of the directory
+current_dir <- basename(getwd())
+
+if (current_dir != "scripts") {
+  setwd("./scripts/")
+}
 
 # LOAD LIBRARIES ----
 library(tidyverse)
@@ -65,14 +73,15 @@ head(seurat_obj$seurat_clusters)
 
 # Create UMAP
 seurat_obj <- RunUMAP(seurat_obj, dims = 1:30)
-umap_clusters <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, raster = FALSE)
-umap_tissue <- DimPlot(seurat_obj, reduction = "umap", group.by = "organ_custom", label = TRUE, raster = FALSE)
-umap_time <- DimPlot(seurat_obj, reduction = "umap", group.by = "time", raster = FALSE)
-
+umap_clusters <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, raster = FALSE) + 
+  ggtitle("")
+umap_tissue <- DimPlot(seurat_obj, reduction = "umap", group.by = "organ_custom", label = TRUE, raster = FALSE) + 
+  ggtitle("")
+umap_time <- DimPlot(seurat_obj, reduction = "umap", group.by = "time", raster = FALSE) + 
+  ggtitle("")
+ggsave("../figs/umap_tissue.png", plot = umap_tissue, width = 10, height = 8, dpi = 300)
+ggsave("../figs/umap_time.png", plot = umap_time, width = 10, height = 8, dpi = 300)
 ggsave("../figs/05_umap_clusters.png", plot = umap_clusters, width = 10, height = 8, dpi = 300)
-
-# Save Processed Seurat Object
-saveRDS(seurat_obj, "../data/seurat_processed.rds")
 
 # Find cluster markers
 all_markers <- FindAllMarkers(seurat_obj, only.pos = TRUE)
@@ -94,15 +103,22 @@ table(singler_results$labels)
 seurat_obj$SingleR.labels <- singler_results$labels
 
 # Look at cell types across time points and tissue types
-print("Frequency of cell types across time:")
+cat("Frequency of cell types across time:")
 table(seurat_obj$SingleR.labels, seurat_obj$time)
 
-print("Frequency of cell types across tissue types:")
+cat("Frequency of cell types across tissue types:")
 table(seurat_obj$SingleR.labels, seurat_obj$organ_custom)
 
 # Look at macrophage counts across clusters
-print("Frequency of Macrophages across clusters:")
+cat("Frequency of Macrophages across clusters:")
 table(seurat_obj$seurat_clusters[seurat_obj$SingleR.labels == "Macrophages"])
+
+# UMAP with annotations
+umap_annotated <- DimPlot(seurat_obj, reduction = "umap", 
+                          group.by = "SingleR.labels", 
+                          label = TRUE, repel = TRUE, raster = FALSE) + 
+  ggtitle("")
+ggsave("../figs/06_umap_annotated.png", plot = umap_annotated, width = 12, height = 8, dpi = 300)
 
 # Look at top 20 genes (with statistical significance) in cluster 1 to see if markers line up with Macrophages
 print("Top 20 genes in cluster 1 (by log2 fold change):")
@@ -113,9 +129,9 @@ all_markers %>%
 
 # Feature plot to show cluster 1 markers (Macrophage markers)
 feature_plot <- FeaturePlot(seurat_obj, features = c("Fcrls", "Trem2", "C1qa"), ncol = 3)
-ggsave("../figs/06_feature_plot_macrophages.png", 
+ggsave("../figs/07_feature_plot_macrophages.png", 
        plot = feature_plot, 
        width = 24, height = 8, dpi = 300)
 
-
-
+# Save Processed Seurat Object
+saveRDS(seurat_obj, "../data/seurat_processed.rds")
