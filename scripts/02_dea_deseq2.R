@@ -3,6 +3,7 @@
 # BINF 6110 Lecture 18 Tutorial
 # https://support.bioconductor.org/p/9150793/ 
 # BINF 6110 Assignment 2 Differential Expression Analysis Script 
+# https://learn.gencore.bio.nyu.edu/rna-seq-analysis/over-representation-analysis/
 
 # SET WORKING DIRECTORY ----
 # Assumes user is in the top level of the directory
@@ -77,15 +78,14 @@ write.csv(as.data.frame(res_D08), "../results/de_results_D08.csv")
 write.csv(as.data.frame(res_D14), "../results/de_results_D14.csv")
 
 # Visualize with heat map
-# Select genes with highest log2-fold change between naive and d14
-res_clean_D14 <- na.omit(as.data.frame(res_D14))
-
 # Filter significant genes first, then rank by fold change
-top_genes <- res_clean_D14 %>%
+res_clean_D02 <- na.omit(as.data.frame(res_D02))
+
+# Select genes with highest log2-fold change between naive and d2 (peak viral load)
+top_genes <- res_clean_D02 %>%
   filter(padj < 0.05) %>%
   arrange(desc(abs(log2FoldChange))) %>%
   head(20)
-
 gene_names <- rownames(top_genes)
 
 # Extract transformed & normalized counts with a variance stabilizing transformation
@@ -124,4 +124,32 @@ pheatmap(mat_vsd_ordered,
 dev.off()
 
 # GENE SET ENRICHMENT ANALYSIS (GSEA) ----
+# Get log 2 fold change from results
+full_gene_list <- res_D02$log2FoldChange
 
+# Apply gene names 
+names(full_gene_list) <- rownames(res_D02)
+
+# omit NA values 
+gene_list <- na.omit(full_gene_list)
+
+# sort the list in decreasing order (required for clusterProfiler)
+gene_list = sort(gene_list, decreasing = TRUE)
+
+# Run GSEA
+gse <- gseGO(geneList = gene_list, 
+             ont = "BP", 
+             keyType = "SYMBOL", 
+             OrgDb = org.Mm.eg.db,
+             pvalueCutoff = 0.05, 
+             verbose = TRUE, 
+             pAdjustMethod = "BH")
+
+# Visualize with Dotplot
+require(DOSE)
+dotplot_gse <- dotplot(gse, showCategory = 10, split = ".sign") + facet_grid(.~.sign)
+ggsave("../figs/09_gsea_dotplot.png", plot = dotplot_gse, width = 10, height = 8, dpi = 300)
+
+# Visualize with Ridgeplot
+ridge_gse <- ridgeplot(gse) + labs(x = "Enrichment distribution")
+ggsave("../figs/10_gsea_ridgeplot.png", plot = ridge_gse, width = 10, height = 8, dpi = 300)
