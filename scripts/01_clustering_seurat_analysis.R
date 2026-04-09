@@ -86,7 +86,7 @@ ggsave("../figs/05_umap_clusters.png", plot = umap_clusters, width = 10, height 
 # Find cluster markers
 all_markers <- FindAllMarkers(seurat_obj, only.pos = TRUE)
 
-write.csv(all_markers, "../data/all_markers.csv", row.names = FALSE)
+write.csv(all_markers, "../output/all_markers.csv", row.names = FALSE)
 
 # ANNOTATION ----
 # Loading the mouse immune gene reference library 
