@@ -30,6 +30,7 @@ library(SingleCellExperiment)
 # LOAD DATA ----
 seurat_obj <- readRDS("../data/seurat_ass4.rds")
 cat(sprintf("Cells after loading: %d\n", ncol(seurat_obj)))
+
 # QUALITY CONTROL ----
 # Add percent.mt column to investigate percentage of mitochondrial DNA
 seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^mt-")
@@ -96,7 +97,9 @@ mouse_imm_gen_ref <- ImmGenData()
 sce <- as.SingleCellExperiment(seurat_obj)
 
 # Run SingleR to annotate with reference library
-singler_results <- SingleR(test = sce, ref = mouse_imm_gen_ref, labels = mouse_imm_gen_ref$label.main)
+singler_results <- SingleR(test = sce, ref = mouse_imm_gen_ref, labels =
+                             mouse_imm_gen_ref$label.main)
+
 table(singler_results$labels)
 
 # Add SingleR labels to the Seurat object
