@@ -51,3 +51,41 @@ To visualize the top differentially expressed genes, a variance stabilizing tran
 ### Gene Set Enrichment Analysis
 GSEA was conducted to identify enriched biological processes in macrophages at peak viral load (D02) relative to naive mice using the `gseGO` function from the clusterProfiler v4.16.0 package (15). Gene sets were taken from the GO BP ontology through the Bioconductor org.Mm.eg.db mouse v3.21.0 annotation database (16).
 
+## Results
+
+### Clustering with `FindClusters` recovers 40 clusters with some multi-cluster groups.
+The clustering analysis revealed distinct structure in the data, producing 40 clusters (Figure 5). Many clusters form larger groups, such as clusters 26, 27, 9, 14, 13, and 1, while other clusters are independent, such as 37, 28, and 30 (Figure 5). 
+
+![Figure 5](figs/05_umap_clusters.png)
+**Figure 5. Clustering reveals 40 distinct structures amongst cells.** UMAP embedding of cells across 40 clusters.
+
+### SingleR annotation labels cell types consistent with immune response
+Following annotation with SingleR, 20 clusters were labelled across the 40 Seurat clusters recovered by the previous step (Figure 6). Several identified cell types are associated with immune response, including B cells, macrophages, monocytes, neutrophils, natural killer (NK) cells, and T cells. Epithelial and endothelial cells stand out as the most abundant cell types, followed by a group composed of microglia, macrophages, dendritic cells (DC), monocytes, and basophils (Figure 6).
+
+![Figure 6](figs/06_umap_annotated.png)
+**Figure 6. Annotation recovers cell types consistent with infected nasal mucosa**. UMAP embedding of cells with SingleR automatic annotations identifies specific cell types associated with immune response to pathogens.
+
+### Cluster 1 contains macrophage associated marker genes
+`FindAllMarkers` was used to identify marker genes associated with each cluster. Annotation identified cluster 1 as macrophages by SingleR, and subsequent marker analysis further corroborated the result by highlighting localization of classic macrophage markers (Figure 7). Fcrls, Trem2, and C1qa markers are all relatively highly expressed in cluster 1, with C1qa displaying the highest expression level in the cluster (Figure 7).
+
+![Figure 7](figs/07_feature_plot_macrophages.png)
+**Figure 7. Gene markers associated with macrophages appear in cluster 1.** Feature plots of macrophage-specific gene-markers Fcrls, Trem2, and C1qa all appear in the same cluster, previously identified as cluster 1. Purple values represent higher expression of the gene.
+
+### Differential expression analysis exposes trends in infection-related genes between naive and peak viral load states.
+
+The differential expression analysis highlighted variable trends in genes between tissue types and timepoints. In particular, Hspa1b, S100a9, and Nr1d1 display distinct patterns. Hspa1b was downregulated between naive and peak viral load states, with expression recovering by 14 dpi (Figure 8). Contrastingly, S100a9 was upregulated between naive and 2 dpi, returning to naive-levels of expression by 14 dpi. Finally, Nr1d1 exhibited tissue-specific expression patterns, with notably lower expression in LNG at peak viral load relative to naive, recovering to baseline levels by 5 dpi, before declining again at 8 dpi and partially recovering by 14 dpi.
+
+![Figure 8](figs/08_heatmap_top20.png)
+**Figure 8. Top 20 differentially expressed genes in the proposed macrophage cluster reveal distinct expression profiles across the course of IAV infection.** Heatmap showing variance-stabilized expression of the top 20 differentially expressed genes as selected by log2 fold changes between naive cells and cells at peak viral load (2 days post infection, dpi) in cluster 1. Columns represent pseudobulked samples grouped by timepoint (naive, 2, 5, 8, and 14 dpi) and tissue type (respiratory mucosa, RM; olfactory mucosa, OM; and lateral nasal gland, LNG). Blue indicates lower relative expression, and orange represents higher relative expression for each gene.
+
+### GSEA highlights activated and suppressed GO Biological Processes between naive and peak viral load states 
+
+GSEA of the proposed macrophage cluster comparing cells at 2 dpi to naive cells identified 8 significantly enriched GO Biological Process gene sets (padj < 0.05; Figure 9, 10). Five gene sets were suppressed at 2 dpi relative to naive, including protein folding, cytoplasmic translation,and synaptic translation processes. Three gene sets were activated, including inorganic ion import across the plasma membrane, inorganic cation import across the plasma membrane, and transmission of nerve impulse (Figure 9, 10). Moreover, the activated pathways show multimodal distributions, while the suppressed pathways have narrow distributions (Figure 10).
+
+![Figure 9](figs/09_gsea_dotplot.png)
+**Figure 9. Gene set enrichment analysis reveals enriched and suppressed Gene Ontology Biological Processes in the proposed macrophage cluster at peak viral load.** Dot plot showing activated and suppressed biological processes between naive and peak viral load groups within the proposed macrophage cluster (cluster 1). Dot size indicates the number of genes contributing to enrichment and color indicating adjusted p-value.
+
+![Figure 10](figs/10_gsea_ridgeplot.png)
+**Figure 10. Enrichment distribution of significantly enriched Gene Ontology Biological Processes.** Ridge plot showing the distribution of log2 fold change values for genes within each significantly enriched GO Biological Process gene set, comparing peak viral load (2 dpi) to naive controls within the proposed macrophage cluster (cluster 1). Red distributions indicate suppressed pathways and blue distributions indicate activated pathways.
+
+## Discussion
