@@ -106,3 +106,52 @@ In summary, the workflow and analysis presented here demonstrate the utility of 
 
 
 ## References
+1. Huang, W., Wang, D., & Yao, Y.-F. (2021). Understanding the pathogenesis of infectious diseases by single-cell RNA sequencing. Microbial Cell, 8(9), 208–222. https://doi.org/10.15698/mic2021.09.759 
+
+2. Sganzerla Martinez, G., Garduno, A., Toloue Ostadgavahi, A., Hewins, B., Dutt, M., Kumar, A., Martin-Loeches, I., & Kelvin, D. J. (2024). Identification of marker genes in infectious diseases from scrna-seq data using interpretable machine learning. International Journal of Molecular Sciences, 25(11), 5920. https://doi.org/10.3390/ijms25115920 
+
+3. Bosch, A. A., Biesbroek, G., Trzcinski, K., Sanders, E. A., & Bogaert, D. (2013). Viral and bacterial interactions in the upper respiratory tract. PLoS Pathogens, 9(1). https://doi.org/10.1371/journal.ppat.1003057 
+
+4. Chen, S., Saeed, A. F. U. H., Liu, Q., Jiang, Q., Xu, H., Xiao, G. G., Rao, L., & Duo, Y. (2023). Macrophages in immunoregulation and therapeutics. Signal Transduction and Targeted Therapy, 8(1). https://doi.org/10.1038/s41392-023-01452-1 
+
+5. Nesari, A. M., MotieGhader, H., & Ghorbian, S. (2026). Advances and challenges in single-cell RNA sequencing data analysis: A comprehensive review. Briefings in Bioinformatics, 27(1). https://doi.org/10.1093/bib/bbaf723 
+
+6. Squair, J. W., Gautier, M., Kathe, C., Anderson, M. A., James, N. D., Hutson, T. H., Hudelle, R., Qaiser, T., Matson, K. J., Barraud, Q., Levine, A. J., La Manno, G., Skinnider, M. A., & Courtine, G. (2021). Confronting false discoveries in single-cell differential expression. Nature Communications, 12(1). https://doi.org/10.1038/s41467-021-25960-2 
+
+7. Hao, Y., Stuart, T., Kowalski, M. H., Choudhary, S., Hoffman, P., Hartman, A., Srivastava, A., Molla, G., Madad, S., Fernandez-Granda, C., & Satija, R. (2023). Dictionary learning for integrative, Multimodal and scalable single-cell analysis. Nature Biotechnology, 42(2), 293–304. https://doi.org/10.1038/s41587-023-01767-y 
+
+8. Cao, J., Spielmann, M., Qiu, X., Huang, X., Ibrahim, D. M., Hill, A. J., Zhang, F., Mundlos, S., Christiansen, L., Steemers, F. J., Trapnell, C., & Shendure, J. (2019). The single-cell transcriptional landscape of mammalian organogenesis. Nature, 566(7745), 496–502. https://doi.org/10.1038/s41586-019-0969-x  
+
+9. Kiselev, V. Y., Kirschner, K., Schaub, M. T., Andrews, T., Yiu, A., Chandra, T., Natarajan, K. N., Reik, W., Barahona, M., Green, A. R., & Hemberg, M. (2017). SC3: Consensus clustering of single-cell RNA-seq data. Nature Methods, 14(5), 483–486. https://doi.org/10.1038/nmeth.4236 
+
+10. Love, M. I., Huber, W., & Anders, S. (2014). Moderated estimation of fold change and dispersion for RNA-seq data with deseq2. Genome Biology, 15(12). https://doi.org/10.1186/s13059-014-0550-8 
+
+11. Zhang, Z. H., Jhaveri, D. J., Marshall, V. M., Bauer, D. C., Edson, J., Narayanan, R. K., Robinson, G. J., Lundberg, A. E., Bartlett, P. F., Wray, N. R., & Zhao, Q.-Y. (2014). A comparative study of techniques for differential expression analysis on RNA-Seq Data. PLoS ONE, 9(8). https://doi.org/10.1371/journal.pone.0103207  
+
+12. Kazer, S. W., Match, C. M., Langan, E. M., Messou, M.-A., LaSalle, T. J., O’Leary, E., Marbourg, J., Naughton, K., von Andrian, U. H., & Ordovas-Montanes, J. (2024). Primary nasal influenza infection rewires tissue-scale memory response dynamics. Immunity, 57(8). https://doi.org/10.1016/j.immuni.2024.06.005 
+
+13. Aran, D., Looney, A. P., Liu, L., Wu, E., Fong, V., Hsu, A., Chak, S., Naikawadi, R. P., Wolters, P. J., Abate, A. R., Butte, A. J., & Bhattacharya, M. (2019). Reference-based analysis of lung single-cell sequencing reveals a transitional profibrotic macrophage. Nature Immunology, 20(2), 163–172. https://doi.org/10.1038/s41590-018-0276-y 
+
+14. Zhu, A., Ibrahim, J. G., & Love, M. I. (2018). Heavy-tailed prior distributions for sequence count data: Removing the noise and preserving large differences. Bioinformatics, 35(12), 2084–2092. https://doi.org/10.1093/bioinformatics/bty895 
+
+15. Xu, S., Hu, E., Cai, Y., Xie, Z., Luo, X., Zhan, L., Tang, W., Wang, Q., Liu, B., Wang, R., Xie, W., Wu, T., Xie, L., & Yu, G. (2024). Using clusterprofiler to characterize Multiomics Data. Nature Protocols, 19(11), 3292–3320. https://doi.org/10.1038/s41596-024-01020-z 
+
+16. Carlson, M. (2026). Gnome wide annotation for Mouse. org.Mm.eg.db. https://bioconductor.org/packages/release/data/annotation/html/org.Mm.eg.db.html 
+
+17. Kolde, R. (2025). Pheatmap: Pretty heatmaps. The Comprehensive R Archive Network. https://cran.r-project.org/package=pheatmap
+
+18. Freeman, S. C., Karp, D. A., & Kahwaji, C. I. (2023). Physiology, nasal. StatPearls [Internet]. https://www.ncbi.nlm.nih.gov/books/NBK526086/#:~:text=Epithelial%20Cells%20(Cilia),in%20mucus%20production%20and%20release 
+
+19. Butovsky, O., Jedrychowski, M. P., Moore, C. S., Cialic, R., Lanser, A. J., Gabriely, G., Koeglsperger, T., Dake, B., Wu, P. M., Doykan, C. E., Fanek, Z., Liu, L., Chen, Z., Rothstein, J. D., Ransohoff, R. M., Gygi, S. P., Antel, J. P., & Weiner, H. L. (2013). Identification of a unique TGF-β–dependent molecular and functional signature in microglia. Nature Neuroscience, 17(1), 131–143. https://doi.org/10.1038/nn.3599  
+
+20. Ginhoux, F., Greter, M., Leboeuf, M., Nandi, S., See, P., Gokhan, S., Mehler, M. F., Conway, S. J., Ng, L. G., Stanley, E. R., Samokhvalov, I. M., & Merad, M. (2010). Fate mapping analysis reveals that adult microglia derive from primitive macrophages. Science, 330(6005), 841–845. https://doi.org/10.1126/science.1194637  
+
+21. Jaitin, D. A., Adlung, L., Thaiss, C. A., Weiner, A., Li, B., Descamps, H., Lundgren, P., Bleriot, C., Liu, Z., Deczkowska, A., Keren-Shaul, H., David, E., Zmora, N., Eldar, S. M., Lubezky, N., Shibolet, O., Hill, D. A., Lazar, M. A., Colonna, M., … Amit, I. (2019). Lipid-associated macrophages control metabolic homeostasis in a trem2-dependent manner. Cell, 178(3). https://doi.org/10.1016/j.cell.2019.05.054 
+
+22. Zhang, X., & Yu, W. (2022). Heat shock proteins and viral infection. Frontiers in Immunology, 13. https://doi.org/10.3389/fimmu.2022.947789 
+
+23. Boucher, J., Gilbert, C., Bose, S., & Tessier, P. A. (2024). S100A9: The unusual suspect connecting viral infection and inflammation. The Journal of Immunology, 212(10), 1523–1529. https://doi.org/10.4049/jimmunol.2300640 
+
+24. Stern-Ginossar, N., Thompson, S. R., Mathews, M. B., & Mohr, I. (2018). Translational control in virus-infected cells. Cold Spring Harbor Perspectives in Biology, 11(3). https://doi.org/10.1101/cshperspect.a033001 
+
+25. Selezneva, A., Gibb, A. J., & Willis, D. (2022). The contribution of Ion Channels to shaping macrophage behaviour. Frontiers in Pharmacology, 13. https://doi.org/10.3389/fphar.2022.970234 
