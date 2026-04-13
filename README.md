@@ -89,8 +89,6 @@ GSEA of the proposed macrophage cluster comparing cells at 2 dpi to naive cells 
 **Figure 10. Enrichment distribution of significantly enriched Gene Ontology Biological Processes.** Ridge plot showing the distribution of log2 fold change values for genes within each significantly enriched GO Biological Process gene set, comparing peak viral load (2 dpi) to naive controls within the proposed macrophage cluster (cluster 1). Red distributions indicate suppressed pathways and blue distributions indicate activated pathways.
 
 ## Discussion
-## Discussion
-
 This analysis describes a complete workflow for analysing scRNA-seq data of nasal mucosa tissue after infection with IAV, including data cleaning, normalization, dimensionality reduction, clustering, annotation, differential analysis, and gene set analysis of GO BP enrichment. As well, notable patterns were identified that provide insights into the potential cellular processes and functions between naive and peak viral load states. 
 First, clustering analysis recovered 40 distinct clusters, which were subsequently assigned 20 cell type labels following SingleR annotation (Figure 5, Figure 6). The discrepancy between clusters and labels may be due to the resolution of the annotation step. While automatic annotation with the celldex reference provided a streamlined approach to identifying cell types, perhaps cell sub-types were not well-represented enough to recover their most specific labels. In fact, Kazer and colleagues identified several cell types that are not represented by the automatic annotation here (12). An extension of this analysis would benefit from performing manual annotation, comparing these 40 clusters to those recovered by Kazer and colleagues. 
 
